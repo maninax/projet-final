@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    env: prod
+    app: odoo-deploy
+    group: bdd
+  name: odoo-deploy
+  namespace: icgroup
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: odoo
+        env: prod
+    spec:
+      containers:
+      - env:
+        - name: HOST
+          value: bdd-odoo
+        - name: PORT
+          value: "5432"
+        - name: USER
+          valueFrom:
+            secretKeyRef:
+              name: bdd-odoo
+              key: BDD_USER
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bdd-odoo
+              key: BDD_PASSWORD
+        image: odoo:13.0
+        name: odoo
+        ports:
+        - containerPort: 8069
+          name: odoo-access
+

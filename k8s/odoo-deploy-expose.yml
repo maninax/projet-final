@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: odoo # Nom du Service qui permettra d'exposer le port de la BDD
+  namespace: icgroup
+  labels:
+    env: prod
+    app: odoo
+spec:
+  selector: # Sélection du Pod avec pour labels group=bdd et env=prod
+    app: odoo-deploy # Label spécifique pour sélectionner l'app à exposer, ici le odoo-deploy
+    env: prod
+  type: NodePort
+  ports:
+  - name: odoo-port
+    port: 8069 # Other apps using the same Service can access Odoo using port 8080
+    targetPort: odoo-access # Internal port exposed by the app in the Docker container

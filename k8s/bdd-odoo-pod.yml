@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: bdd-odoo
+    env: prod
+    group: bdd
+  name: bdd-odoo # Nom du Pod
+  namespace: icgroup
+spec:
+  containers:
+  - image: postgres:13
+    env:
+      - name: PG_DATA
+        value: /opt/pgdata
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: bdd-odoo
+            key: BDD_USER
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: bdd-odoo
+            key: BDD_PASSWORD
+    name: bdd-odoo # Nom du container Docker créé
+    ports:
+    - containerPort: 5432
+      name: bdd-access # Nom donné au port à exposer via le Service bdd-odoo (ClusterIP)
+    volumeMounts:
+      - mountPath: /opt/pgdata
+        name: pgsql-data # Nom du volume à employer
+  volumes:
+  - name: pgsql-data
+    hostPath:
+      path: /opt/pgsql-data
+      type: DirectoryOrCreate
+
