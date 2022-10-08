@@ -1,4 +1,8 @@
-﻿# PROJET FINAL DEVOPS.
+﻿## Copie de l'énoncé du projet final
+### Groupe 1
+Alexis Carrière - Magatte Diop - Antoine Léomant
+
+ # PROJET FINAL DEVOPS.
 
 ## **1) Introduction**
 
