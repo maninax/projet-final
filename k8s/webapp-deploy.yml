@@ -18,6 +18,11 @@ spec:
       containers:
         - name: webapp
           image: maninax/ic-webapp:1.0
+          env:
+            - name: ODOO_URL
+              value: https://www.odoo.com
+            - name: PGADMIN_URL
+              value: https://www.pgadmin.org
           ports:
             - name: webapp-access
               containerPort: 8080
