@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webapp-deployment
+  namespace: icgroup
   labels:
     env: prod
     app: webapp
