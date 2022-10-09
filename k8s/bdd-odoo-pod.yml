@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
     - name: bdd-odoo # Nom du container créé
-      image: postgres:13
+      image: postgres
       env:
         - name: POSTGRES_DB
           value: postgres # Si non défini, défaut: $POSTGRES_USER et l'initialisation d'Odoo échouera
