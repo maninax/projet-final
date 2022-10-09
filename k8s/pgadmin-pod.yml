@@ -9,9 +9,9 @@ metadata:
   namespace: icgroup
 spec:
   securityContext:
-    runAsUser: 0 # Otherwise, the mounted volume is not writable
+    runAsUser: 0 # Otherwise, the pgadmin-data volume is not writable
   containers:
-    - name: pgadmin # Nom du container créé
+    - name: pgadmin # Container name and address
       image: dpage/pgadmin4
       env:
         - name: PGADMIN_DEFAULT_EMAIL
@@ -25,17 +25,18 @@ spec:
               name: pgadmin
               key: PGADMIN_PASSWORD
       ports:
-        - name: pgadmin-access # Nom donné au port à exposer via le Service pgadmin
+        - name: pgadmin-access # Name of the port exposed via the pgadmin Service
           containerPort: 80
       volumeMounts:
         - name: pgadmin-data
           mountPath: /var/lib/pgadmin
         - name: pgadmin-config-volume
-          mountPath: /pgadmin4
+          mountPath: /pgadmin4/servers.json
+          subPath: servers.json
   volumes:
     - name: pgadmin-data
       persistentVolumeClaim:
         claimName: pgadmin-pvclaim
     - name: pgadmin-config-volume
       configMap:
-        pgadmin-config
+        name: pgadmin-config

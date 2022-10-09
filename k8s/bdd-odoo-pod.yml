@@ -31,7 +31,7 @@ spec:
           containerPort: 5432
       volumeMounts:
         - name: bdd-odoo-data # Nom du volume à employer
-          mountPath: /var/lib/postgresql/data # Nom du dossier où pgsql sauvegarde sa base de données 
+          mountPath: /var/lib/postgresql/data # Nom du dossier où pgsql sauvegarde sa base de données
   volumes:
     - name: bdd-odoo-data
       persistentVolumeClaim:
