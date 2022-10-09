@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp # Nom du Service qui permettra d'exposer le port de la webapp
+  namespace: icgroup
+  labels:
+    env: prod
+    app: webapp
+spec:
+  type: NodePort
+  selector:
+    app: webapp
+  ports:
+    - name: webapp-port
+      port: 8080 # Port for internal access through this service; basically useless here
+      targetPort: webapp-access # Internal port exposed by the app inside the Docker container
+      nodePort: 30010 # Port for external access
