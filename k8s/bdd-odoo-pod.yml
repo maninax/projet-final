@@ -9,30 +9,30 @@ metadata:
   namespace: icgroup
 spec:
   containers:
-  - image: postgres:13
-    env:
-      - name: PG_DATA
-        value: /opt/pgdata
-      - name: POSTGRES_USER
-        valueFrom:
-          secretKeyRef:
-            name: bdd-odoo
-            key: BDD_USER
-      - name: POSTGRES_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: bdd-odoo
-            key: BDD_PASSWORD
-    name: bdd-odoo # Nom du container Docker créé
-    ports:
-    - containerPort: 5432
-      name: bdd-access # Nom donné au port à exposer via le Service bdd-odoo (ClusterIP)
-    volumeMounts:
-      - mountPath: /opt/pgdata
-        name: pgsql-data # Nom du volume à employer
+    - name: bdd-odoo # Nom du container créé
+      image: postgres
+      env:
+        - name: POSTGRES_DB
+          value: postgres # Si non défini, défaut: $POSTGRES_USER et l'initialisation d'Odoo échouera
+        - name: PGDATA
+          value: /var/lib/postgresql/data
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: bdd-odoo
+              key: BDD_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bdd-odoo
+              key: BDD_PASSWORD
+      ports:
+        - name: bdd-access # Nom donné au port à exposer via le Service bdd-odoo (ClusterIP)
+          containerPort: 5432
+      volumeMounts:
+        - name: bdd-odoo-data # Nom du volume à employer
+          mountPath: /var/lib/postgresql/data # Nom du dossier où pgsql sauvegarde sa base de données 
   volumes:
-  - name: pgsql-data
-    hostPath:
-      path: /opt/pgsql-data
-      type: DirectoryOrCreate
-
+    - name: bdd-odoo-data
+      persistentVolumeClaim:
+        claimName: bdd-odoo-pvclaim

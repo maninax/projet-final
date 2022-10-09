@@ -12,6 +12,6 @@ spec:
     env: prod
   type: ClusterIP
   ports:
-  - name: bdd-port
-    port: 5432
-    targetPort: bdd-access
+    - name: bdd-port
+      port: 5432
+      targetPort: bdd-access

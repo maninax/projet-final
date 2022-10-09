@@ -19,25 +19,34 @@ spec:
         app: odoo
         env: prod
     spec:
+      securityContext: # Necessary because non-root users inside a container cannot write in a PV 
+        # fsGroup: 101 # User is (odoo:x:101:101) - it doesn't work. Bug?
+        runAsUser: 0 # Workaround: processes inside Odoo containers are launched with uid 0 (root).
       containers:
-      - env:
-        - name: HOST
-          value: bdd-odoo
-        - name: PORT
-          value: "5432"
-        - name: USER
-          valueFrom:
-            secretKeyRef:
-              name: bdd-odoo
-              key: BDD_USER
-        - name: PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: bdd-odoo
-              key: BDD_PASSWORD
-        image: odoo:13.0
-        name: odoo
-        ports:
-        - containerPort: 8069
-          name: odoo-access
-
+        - name: odoo
+          env:
+            - name: HOST
+              value: bdd-odoo
+            - name: PORT
+              value: "5432"
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: bdd-odoo
+                  key: BDD_USER
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bdd-odoo
+                  key: BDD_PASSWORD
+          image: odoo:13.0
+          ports:
+            - containerPort: 8069
+              name: odoo-access
+          volumeMounts:
+            - name: odoo-data
+              mountPath: /var/lib/odoo
+      volumes:
+        - name: odoo-data
+          persistentVolumeClaim:
+            claimName: odoo-pvclaim
