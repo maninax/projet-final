@@ -8,5 +8,9 @@ RUN pip install flask==1.1.2
 ADD https://github.com/sadofrazer/ic-webapp/archive/refs/heads/master.zip /opt
 RUN unzip master.zip
 
-ENTRYPOINT ["/usr/local/bin/python", "ic-webapp-master/app.py"]
+ADD ../releases.txt /opt
+ADD run_flask.sh /opt
+ADD convert.sh /opt
+RUN sh convert.sh
 
+ENTRYPOINT ["/bin/sh", "run_flask.sh"]
