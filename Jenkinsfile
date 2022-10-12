@@ -7,6 +7,7 @@ pipeline {
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2 | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
+    ANSIBLE_CONFIG = "sources/ansible/ansible.cfg"
   }
 
   agent any
