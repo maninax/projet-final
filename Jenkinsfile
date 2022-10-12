@@ -72,7 +72,7 @@ pipeline {
                 installation: 'ansible',
                 inventory: 'sources/ansible/hosts.yml',
                 playbook: 'sources/ansible/play.yml', // A playbook to play all playbooks, and in the darkness bind them
-                extras: '--extra-vars "NETWORK_NAME=network \ // TODO: check if all of this is applicable here
+                extras: '--extra-vars "NETWORK_NAME=network \
                         IMAGE_TAG=${IMAGE_TAG} \
                         ansible_user=${ansible_user} \
                         ansible_password=${ansible_user_pass} \
