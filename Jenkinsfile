@@ -96,7 +96,8 @@ pipeline {
                 echo CONTAINER_NAME=$CONTAINER_NAME;
                 echo USER_NAME=$USER_NAME;
                 echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
-                // Showcase website runs on the same server as the pgadmin 
+
+                # Showcase website runs on the same server as the pgadmin 
                 curl -LI ${PGADMIN_URL} | grep "200";
                 curl -L ${PGADMIN_URL} | grep "IC GROUP";
 
