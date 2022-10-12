@@ -7,7 +7,6 @@ pipeline {
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2 | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
-    ANSIBLE_CONFIG = "sources/ansible/ansible.cfg"
   }
 
   agent any
@@ -67,7 +66,6 @@ pipeline {
                 usernamePassword(credentialsId: 'pgsql_credentials', usernameVariable: 'pgsql_user', passwordVariable: 'pgsql_pass'),
                 // string(credentialsId: 'ansible_sudo_pass', variable: 'ansible_sudo_pass')
             ]){
-            sh "ls -R"
             ansiblePlaybook (
                 disableHostKeyChecking: true,
                 installation: 'ansible',
@@ -90,8 +88,14 @@ postgres_hostname=${POSTGRES_HOSTNAME} \
     stage ('Test full deployment') {
         steps {
             sh '''
-                sleep 10;
-
+                echo IMAGE_NAME=$IMAGE_NAME;
+                echo IMAGE_TAG=$IMAGE_TAG;
+                echo ODOO_URL=$ODOO_URL;
+                echo POSTGRES_HOSTNAME=$POSTGRES_HOSTNAME;
+                echo PGADMIN_URL=$PGADMIN_URL;
+                echo CONTAINER_NAME=$CONTAINER_NAME;
+                echo USER_NAME=$USER_NAME;
+                echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
                 // Showcase website runs on the same server as the pgadmin 
                 curl -LI ${PGADMIN_URL} | grep "200";
                 curl -L ${PGADMIN_URL} | grep "IC GROUP";
