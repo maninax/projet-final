@@ -59,14 +59,13 @@ pipeline {
 */
 
     stage ('Deploy to prod with Ansible') {
-        steps { // Assume Ansible is installed by VM provisioning
+        steps {
             withCredentials([
                 usernamePassword(credentialsId: 'ansible_user_credentials', usernameVariable: 'ansible_user', passwordVariable: 'ansible_user_pass'),
                 usernamePassword(credentialsId: 'pgadmin_credentials', usernameVariable: 'pgadmin_user', passwordVariable: 'pgadmin_pass'),
                 usernamePassword(credentialsId: 'pgsql_credentials', usernameVariable: 'pgsql_user', passwordVariable: 'pgsql_pass'),
                 // string(credentialsId: 'ansible_sudo_pass', variable: 'ansible_sudo_pass')
             ]){
-            sh "echo ---------------- ; ansible-playbook || true ; echo $PATH ; ls /usr/bin ; echo -------------------"
             ansiblePlaybook (
                 disableHostKeyChecking: true,
                 installation: 'ansible',
