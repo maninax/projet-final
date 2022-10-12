@@ -97,7 +97,7 @@ pipeline {
                 echo CONTAINER_NAME=$CONTAINER_NAME;
                 echo USER_NAME=$USER_NAME;
                 echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
-		echo PGADMIN_URL=$PGADMIN_URL;
+		echo PGADMIN_HOSTNAME=$PGADMIN_HOSTNAME;
 
                 curl -LI http://${PGADMIN_HOSTNAME}:80 | grep "200";
                 curl -L http://${PGADMIN_HOSTNAME}:80 | grep "IC GROUP";
