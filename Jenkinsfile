@@ -68,7 +68,7 @@ pipeline {
                 usernamePassword(credentialsId: 'pgsql_credentials', usernameVariable: 'pgsql_user', passwordVariable: 'pgsql_pass'),
                 // string(credentialsId: 'ansible_sudo_pass', variable: 'ansible_sudo_pass')
             ]){
-            sh "echo $PATH"
+            sh "ls"
             ansiblePlaybook ( // TODO: put the correct infos there
                 disableHostKeyChecking: true,
                 installation: 'ansible',
