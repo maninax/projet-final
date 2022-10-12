@@ -98,7 +98,7 @@ pipeline {
                 echo USER_NAME=$USER_NAME;
                 echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
 
-                Test for ic-webapp
+                # Test for ic-webapp
                 # Showcase website runs on the same server as the pgadmin 
                 curl -LI http://${PGADMIN_HOSTNAME}:80 | grep "200";
                 curl -L http://${PGADMIN_HOSTNAME}:80 | grep "IC GROUP";
