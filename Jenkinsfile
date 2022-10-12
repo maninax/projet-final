@@ -81,7 +81,7 @@ pipeline {
                         pg_admin_password=${pgadmin_pass} \
                         odoo_user=${pgsql_user} \
                         odoo_password=${pgsql_pass} \
-                        postgres_hostname=${POSTGRES_HOSTNAME}
+                        postgres_hostname=${POSTGRES_HOSTNAME} \
                         "')
             }
         }
