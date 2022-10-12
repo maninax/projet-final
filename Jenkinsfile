@@ -1,8 +1,8 @@
 pipeline {
   environment {
     IMAGE_NAME = "ic-webapp"
-    IMAGE_TAG = "${sh(returnStdout: true, script: 'grep version releases.txt | cut -d\\: -f2 | xargs')}"
-    ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d\\: -f2 | xargs')}"
+    IMAGE_TAG = "${sh(returnStdout: true, script: 'grep version releases.txt | cut -d\\: -f2- | xargs')}"
+    ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d\\: -f2- | xargs')}"
     POSTGRES_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2 | xargs')}"
     CONTAINER_NAME = "ic-webapp"
@@ -72,14 +72,14 @@ pipeline {
                 inventory: 'sources/ansible/hosts.yml',
                 playbook: 'sources/ansible/playbooks/main.yml', // A playbook to play all playbooks, and in the darkness bind them
                 extras: '--extra-vars "NETWORK_NAME=network \
-IMAGE_TAG=${IMAGE_TAG} \
-ansible_user=${ansible_user} \
-ansible_password=${ansible_user_pass} \
-pg_admin_email=${pgadmin_user} \
-pg_admin_password=${pgadmin_pass} \
-odoo_user=${pgsql_user} \
-odoo_password=${pgsql_pass} \
-postgres_hostname=${POSTGRES_HOSTNAME} \
+                IMAGE_TAG=${IMAGE_TAG} \
+                ansible_user=${ansible_user} \
+                ansible_password=${ansible_user_pass} \
+                pg_admin_email=${pgadmin_user} \
+                pg_admin_password=${pgadmin_pass} \
+                odoo_user=${pgsql_user} \
+                odoo_password=${pgsql_pass} \
+                postgres_hostname=${POSTGRES_HOSTNAME} \
 "')
             }
         }
