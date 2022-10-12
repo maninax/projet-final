@@ -71,7 +71,7 @@ pipeline {
                 disableHostKeyChecking: true,
                 installation: 'ansible',
                 inventory: 'sources/ansible/hosts.yml',
-                playbook: 'sources/ansible/play.yml', // A playbook to play all playbooks, and in the darkness bind them
+                playbook: 'sources/ansible/playbooks/main.yml', // A playbook to play all playbooks, and in the darkness bind them
                 extras: '--extra-vars "NETWORK_NAME=network \
 IMAGE_TAG=${IMAGE_TAG} \
 ansible_user=${ansible_user} \
