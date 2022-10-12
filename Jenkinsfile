@@ -41,9 +41,15 @@ pipeline {
             sh '''
                 docker stop ${CONTAINER_NAME} || true;
                 docker rm ${CONTAINER_NAME} || true;
-                docker run -d --name ${CONTAINER_NAME} -p 9090:8080 ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
-                sleep 1000;
-                curl http://localhost:9090 | grep -q "IC GROUP";
+                docker run -d --name ${CONTAINER_NAME} ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
+                docker network create test || true
+                docker network connect test $HOSTNAME
+                docker network connect test ${CONTAINER_NAME}
+                sleep 2;
+                curl http://${CONTAINER_NAME}:8080 | grep -q "IC GROUP";
+                docker network disconnect test $HOSTNAME
+                docker network disconnect test ${CONTAINER_NAME}
+                docker network rm test
                 docker stop ${CONTAINER_NAME};
                 docker rm ${CONTAINER_NAME};
             '''
