@@ -43,6 +43,9 @@ pipeline {
                 docker rm ${CONTAINER_NAME} || true;
                 docker run -d --name ${CONTAINER_NAME} ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
                 docker network create test || true
+		echo \\\\$HOSTNAME
+		echo \\$HOSTNAME
+		echo \$HOSTNAME
                 docker network connect test \$HOSTNAME
                 docker network connect test ${CONTAINER_NAME}
                 sleep 2;
