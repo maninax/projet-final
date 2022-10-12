@@ -25,6 +25,8 @@ pipeline {
         steps{
             script{
                 sh '''
+                echo USER=\$USER
+                ls /usr/local/bin/
                 cd 'sources/docker/ic-webapp';
                 docker build -t ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG} .;
                 '''
