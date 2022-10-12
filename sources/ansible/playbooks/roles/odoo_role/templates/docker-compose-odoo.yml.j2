@@ -17,7 +17,7 @@ services:
         depends_on:
             - postgres
         ports:
-            - '8069:8069'
+            - '80:8069'
         container_name: {{ odoo_container_name }}
         networks:
             - {{ odoo_network }}

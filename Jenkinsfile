@@ -4,6 +4,7 @@ pipeline {
     IMAGE_TAG = "${sh(returnStdout: true, script: 'grep version releases.txt | cut -d: -f2- | xargs')}"
     ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d: -f2- | xargs')}"
     POSTGRES_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
+    PGADMIN_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2- | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
@@ -97,13 +98,16 @@ pipeline {
                 echo USER_NAME=$USER_NAME;
                 echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
 
+                Test for ic-webapp
                 # Showcase website runs on the same server as the pgadmin 
-                curl -LI ${PGADMIN_URL} | grep "200";
-                curl -L ${PGADMIN_URL} | grep "IC GROUP";
+                curl -LI http://${PGADMIN_HOSTNAME}:80 | grep "200";
+                curl -L http://${PGADMIN_HOSTNAME}:80 | grep "IC GROUP";
 
-                curl -LI ${ODOO_URL}:5432 | grep "200";
-                curl -L ${ODOO_URL}:5432 | grep "Odoo";
+                # Test for Odoo
+                curl -LI ${ODOO_URL} | grep "200";
+                curl -L ${ODOO_URL} | grep "Odoo";
 
+                # Test for pgAdmin
                 curl -LI ${PGADMIN_URL} | grep "200";
                 curl -L ${PGADMIN_URL} | grep "pgAdmin 4";
             '''
