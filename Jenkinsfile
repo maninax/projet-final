@@ -21,7 +21,7 @@ pipeline {
   agent any
 
   stages {
-/*
+
     stage ('Build docker image') {
         steps{
             script{
@@ -64,9 +64,10 @@ pipeline {
             }
         }
     }
-*/
+
 
     stage ('Deploy to prod with Ansible') {
+	agent { label 'jenkins-build-ci' } 
         steps {
             withCredentials([
                 usernamePassword(credentialsId: 'ansible_user_credentials', usernameVariable: 'ansible_user', passwordVariable: 'ansible_pass'),
@@ -103,6 +104,7 @@ pipeline {
     }
 
     stage ('Test full deployment') {
+	agent { label 'jenkins-build-ci' }
         steps {
             sh '''
                 curl -LI http://${WORKER2_HOSTNAME}:80 | grep "200";
