@@ -96,15 +96,6 @@ pipeline {
                     postgres_port=${POSTGRES_PORT} \
                     postgres_user=${pgsql_user} \
                     postgres_password=${pgsql_pass} \
-                    
-                        
-         
-NETWORK_NAME=network \
-                IMAGE_TAG=${IMAGE_TAG} \
-                ansible_user=${ansible_user} \
-                ansible_password=${ansible_user_pass} \
-                
-                postgres_hostname=${POSTGRES_HOSTNAME} \
 "')
             }
         }
