@@ -42,7 +42,7 @@ pipeline {
                 docker stop ${CONTAINER_NAME} || true;
                 docker rm ${CONTAINER_NAME} || true;
                 docker run -d --name ${CONTAINER_NAME} -p 9090:8080 ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
-                sleep 10;
+                sleep 100;
                 curl http://localhost:9090 | grep -q "IC GROUP";
                 docker stop ${CONTAINER_NAME};
                 docker rm ${CONTAINER_NAME};
