@@ -42,8 +42,8 @@ pipeline {
             sh '''
                 docker stop ${CONTAINER_NAME} || true;
                 docker rm ${CONTAINER_NAME} || true;
-                docker run -d --name ${CONTAINER_NAME} -v 9090:8080 ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
-                sleep 250;
+                docker run -d --name ${CONTAINER_NAME} -p 9090:8080 ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
+                sleep 1;
                 curl http://${JENKINS_BUILDER_HOST_IP}:9090 | grep -q "IC GROUP";
                 docker stop ${CONTAINER_NAME};
                 docker rm ${CONTAINER_NAME};
