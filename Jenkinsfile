@@ -1,7 +1,8 @@
 pipeline {
   environment {
     IMAGE_NAME = "ic-webapp"
-    USER_NAME = "maninax"
+    CONTAINER_NAME = "ic-webapp"
+    USER_NAME = "ordiclic"
 
     IMAGE_TAG = """${sh(returnStdout: true, script: "grep version releases.txt | awk -F': ' '{print \$2}'")}"""
     ODOO_URL = """${sh(returnStdout: true, script: "grep ODOO_URL releases.txt | awk -F': ' '{print \$2}'")}"""
@@ -15,7 +16,7 @@ pipeline {
     ODOO_PORT = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | awk -F": " "{print \$2}" | grep -Po "//.+?:.+/?" | grep -Po "(?<=:)(\\d+)" || echo "80"')}"""
     POSTGRES_PORT = "5432"
 
-    ODOO_DATABASE_VOLUME = "" // #TODO: find a good path for the Odoo DB
+    ODOO_DATABASE_VOLUME = "/mnt/odoo"
   }
 
   agent { label 'jenkins-build-ci' }
