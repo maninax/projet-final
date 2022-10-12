@@ -4,7 +4,7 @@ pipeline {
     IMAGE_TAG = "${sh(returnStdout: true, script: 'grep version releases.txt | cut -d: -f2- | xargs')}"
     ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d: -f2- | xargs')}"
     POSTGRES_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
-    PGADMIN_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
+    PGADMIN_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~PGADMIN_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d: -f2- | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
