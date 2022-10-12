@@ -78,7 +78,7 @@ pipeline {
                 inventory: 'sources/ansible/hosts.yml',
                 playbook: 'sources/ansible/playbooks/main.yml', // A playbook to play all playbooks, and in the darkness bind them
                 extras: '--extra-vars "ansible_user=${ansible_user} \
-                    ansible_password=${ansible_pass} \ 
+                    ansible_password=${ansible_pass} \
                     ic_webapp_name=${IMAGE_NAME} \
                     ic_webapp_image=${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG} \
                     ic_webapp_port=${IC_WEBAPP_PORT} \
@@ -86,12 +86,12 @@ pipeline {
                     odoo_port=${ODOO_PORT} \
                     odoo_username=${odoo_user} \
                     odoo_password=${odoo_pass} \
-                    odoo_database=odoo
+                    odoo_database=odoo \
                     pgadmin_url=${PGADMIN_URL} \
-                    pgadmin_port=${PGADMIN_PORT}
+                    pgadmin_port=${PGADMIN_PORT} \
                     pg_admin_email=${pgadmin_user} \
                     pg_admin_password=${pgadmin_pass} \
-                    postgres_hostname=${WORKER3_HOSTNAME}
+                    postgres_hostname=${WORKER3_HOSTNAME} \
                     postgres_port=${POSTGRES_PORT} \
                     postgres_user=${pgsql_user} \
                     postgres_password=${pgsql_pass} \
