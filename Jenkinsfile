@@ -67,19 +67,18 @@ pipeline {
     stage ('Deploy to prod with Ansible') {
         steps {
             withCredentials([
-                usernamePassword(credentialsId: 'ansible_user_credentials', usernameVariable: 'ansible_user', passwordVariable: 'ansible_user_pass'),
+                usernamePassword(credentialsId: 'ansible_user_credentials', usernameVariable: 'ansible_user', passwordVariable: 'ansible_pass'),
                 usernamePassword(credentialsId: 'pgadmin_credentials', usernameVariable: 'pgadmin_user', passwordVariable: 'pgadmin_pass'),
                 usernamePassword(credentialsId: 'pgsql_credentials', usernameVariable: 'pgsql_user', passwordVariable: 'pgsql_pass'),
-                // string(credentialsId: 'ansible_sudo_pass', variable: 'ansible_sudo_pass')
+                usernamePassword(credentialsId: 'odoo_credentials', usernameVariable: 'odoo_user', passwordVariable: 'odoo_pass')
             ]){
             ansiblePlaybook (
                 disableHostKeyChecking: true,
                 installation: 'ansible',
                 inventory: 'sources/ansible/hosts.yml',
                 playbook: 'sources/ansible/playbooks/main.yml', // A playbook to play all playbooks, and in the darkness bind them
-                extras: '--extra-vars " \
-                    ansible_user=${ansible_user} \
-                    ansible_password=${ansible_user_pass} \ 
+                extras: '--extra-vars "ansible_user=${ansible_user} \
+                    ansible_password=${ansible_pass} \ 
                     ic_webapp_name=${IMAGE_NAME} \
                     ic_webapp_image=${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG} \
                     ic_webapp_port=${IC_WEBAPP_PORT} \
@@ -96,7 +95,7 @@ pipeline {
                     postgres_port=${POSTGRES_PORT} \
                     postgres_user=${pgsql_user} \
                     postgres_password=${pgsql_pass} \
-"')
+                "')
             }
         }
     }
