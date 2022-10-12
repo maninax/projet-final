@@ -21,7 +21,7 @@ pipeline {
   agent any
 
   stages {
-
+/*
     stage ('Build docker image') {
         steps{
             script{
@@ -64,7 +64,7 @@ pipeline {
             }
         }
     }
-
+*/
 
     stage ('Deploy to prod with Ansible') {
 	agent { label 'jenkins-build-ci' } 
