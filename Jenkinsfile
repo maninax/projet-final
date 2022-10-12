@@ -43,9 +43,9 @@ pipeline {
                 docker rm ${CONTAINER_NAME} || true;
                 docker run -d --name ${CONTAINER_NAME} ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
                 docker network create test || true
-                docker network connect test \${BUILD_CONTAINER_ID}
-                docker network connect test ${CONTAINER_NAME}
-                sleep 2;
+                #docker network connect test \${BUILD_CONTAINER_ID}
+                #docker network connect test ${CONTAINER_NAME}
+                sleep 250;
                 curl http://${CONTAINER_NAME}:8080 | grep -q "IC GROUP";
                 docker network disconnect test \${BUILD_CONTAINER_ID}
                 docker network disconnect test ${CONTAINER_NAME}
