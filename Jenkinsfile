@@ -18,8 +18,7 @@ pipeline {
     ODOO_DATABASE_VOLUME = "" // #TODO: find a good path for the Odoo DB
   }
 
-  agent any
-
+  agent { label 'jenkins-build-ci' }
   stages {
 
     stage ('Build docker image') {
