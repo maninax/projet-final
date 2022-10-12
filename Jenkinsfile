@@ -10,7 +10,7 @@ pipeline {
     PATH = "/usr/local/bin:${env.PATH}"
   }
 
-  agent any
+  agent jenkins-build-ci
 
   stages {
     stage ('Build docker image') {
@@ -45,7 +45,6 @@ pipeline {
 /*
     stage ('Login and push docker image') {
         when { changeset "releases.txt"}
-        agent any
         environment {
             DOCKERHUB_PASSWORD  = credentials('dockerhub')
         }
