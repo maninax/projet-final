@@ -99,16 +99,12 @@ pipeline {
                 echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
 		echo PGADMIN_URL=$PGADMIN_URL;
 
-                # Test for ic-webapp
-                # Showcase website runs on the same server as the pgadmin 
                 curl -LI http://${PGADMIN_HOSTNAME}:80 | grep "200";
                 curl -L http://${PGADMIN_HOSTNAME}:80 | grep "IC GROUP";
 
-                # Test for Odoo
                 curl -LI ${ODOO_URL} | grep "200";
                 curl -L ${ODOO_URL} | grep "Odoo";
 
-                # Test for pgAdmin
                 curl -LI ${PGADMIN_URL} | grep "200";
                 curl -L ${PGADMIN_URL} | grep "pgAdmin 4";
             '''
