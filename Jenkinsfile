@@ -8,6 +8,7 @@ pipeline {
     ODOO_URL = """${sh(returnStdout: true, script: "grep ODOO_URL releases.txt | awk -F': ' '{print \$2}'")}"""
     PGADMIN_URL = """${sh(returnStdout: true, script: "grep PGADMIN_URL releases.txt | awk -F': ' '{print \$2}'")}"""
 
+    JENKINS_BUILDER_HOST_IP = 192.168.99.11
     WORKER2_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~PGADMIN_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
     WORKER3_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
 
@@ -41,15 +42,9 @@ pipeline {
             sh '''
                 docker stop ${CONTAINER_NAME} || true;
                 docker rm ${CONTAINER_NAME} || true;
-                docker run -d --name ${CONTAINER_NAME} ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
-                docker network create test || true
-                #docker network connect test \${BUILD_CONTAINER_ID}
-                #docker network connect test ${CONTAINER_NAME}
+                docker run -d --name ${CONTAINER_NAME} -v 9090:8080 ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
                 sleep 250;
-                curl http://${CONTAINER_NAME}:8080 | grep -q "IC GROUP";
-                docker network disconnect test \${BUILD_CONTAINER_ID}
-                docker network disconnect test ${CONTAINER_NAME}
-                docker network rm test
+                curl http://${JENKINS_BUILDER_HOST_IP}:9090 | grep -q "IC GROUP";
                 docker stop ${CONTAINER_NAME};
                 docker rm ${CONTAINER_NAME};
             '''
