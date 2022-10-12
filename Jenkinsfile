@@ -10,7 +10,7 @@ pipeline {
     PATH = "/usr/local/bin:${env.PATH}"
   }
 
-  agent jenkins-build-ci
+  agent any
 
   stages {
     stage ('Build docker image') {
