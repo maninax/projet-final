@@ -1,20 +1,27 @@
 pipeline {
   environment {
     IMAGE_NAME = "ic-webapp"
-    IMAGE_TAG = "${sh(returnStdout: true, script: 'grep version releases.txt | cut -d: -f2- | xargs')}"
-    ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d: -f2- | xargs')}"
-    POSTGRES_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
-    PGADMIN_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~PGADMIN_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
-    PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d: -f2- | xargs')}"
-    CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
+
+    IMAGE_TAG = """${sh(returnStdout: true, script: "grep version releases.txt | awk -F': ' '{print $2}'")}"""
+    ODOO_URL = """${sh(returnStdout: true, script: "grep ODOO_URL releases.txt | awk -F': ' '{print $2}'")}"""
+    PGADMIN_URL = """${sh(returnStdout: true, script: "grep PGADMIN_URL releases.txt | awk -F': ' '{print $2}'")}"""
+
+    WORKER2_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~PGADMIN_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
+    WORKER3_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
+
+    IC_WEBAPP_PORT = "80"
+    PGADMIN_PORT = """${sh(returnStdout: true, script: 'echo PGADMIN_URL | grep -Po '//.+?:.+/?' | grep -Po '(?<=:)(\\d+)' || echo "80"')}"""
+    ODOO_PORT = """${sh(returnStdout: true, script: 'echo ODOO_URL | grep -Po '//.+?:.+/?' | grep -Po '(?<=:)(\\d+)' || echo "80"')}"""
+    POSTGRES_PORT = "5432"
+
+    ODOO_DATABASE_VOLUME = "" // #TODO: find a good path for the Odoo DB
   }
 
   agent any
 
   stages {
     stage ('Build docker image') {
-        when { changeset "releases.txt"}
         steps{
             script{
                 sh '''
@@ -26,7 +33,6 @@ pipeline {
     }
 
     stage ('Test docker image') {
-        when { changeset "releases.txt"}
         steps{
             script{
             sh '''
@@ -34,7 +40,7 @@ pipeline {
                 docker rm ${CONTAINER_NAME} || true;
                 docker run -d --name ${CONTAINER_NAME} -p 9090:8080 ${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG};
                 sleep 3;
-                curl http://192.168.99.12:9090 | grep -q "IC GROUP";
+                curl http://localhost:9090 | grep -q "IC GROUP";
                 docker stop ${CONTAINER_NAME};
                 docker rm ${CONTAINER_NAME};
             '''
@@ -44,7 +50,6 @@ pipeline {
 
 /*
     stage ('Login and push docker image') {
-        when { changeset "releases.txt"}
         environment {
             DOCKERHUB_PASSWORD  = credentials('dockerhub')
         }
@@ -72,14 +77,33 @@ pipeline {
                 installation: 'ansible',
                 inventory: 'sources/ansible/hosts.yml',
                 playbook: 'sources/ansible/playbooks/main.yml', // A playbook to play all playbooks, and in the darkness bind them
-                extras: '--extra-vars "NETWORK_NAME=network \
+                extras: '--extra-vars " \
+                    ansible_user=${ansible_user} \
+                    ansible_password=${ansible_user_pass} \ 
+                    ic_webapp_name=${IMAGE_NAME} \
+                    ic_webapp_image=${USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG} \
+                    ic_webapp_port=${IC_WEBAPP_PORT} \
+                    odoo_url=${ODOO_URL} \
+                    odoo_port=${ODOO_PORT} \
+                    odoo_username=${odoo_user} \
+                    odoo_password=${odoo_pass} \
+                    odoo_database=odoo
+                    pgadmin_url=${PGADMIN_URL} \
+                    pgadmin_port=${PGADMIN_PORT}
+                    pg_admin_email=${pgadmin_user} \
+                    pg_admin_password=${pgadmin_pass} \
+                    postgres_hostname=${WORKER3_HOSTNAME}
+                    postgres_port=${POSTGRES_PORT} \
+                    postgres_user=${pgsql_user} \
+                    postgres_password=${pgsql_pass} \
+                    
+                        
+         
+NETWORK_NAME=network \
                 IMAGE_TAG=${IMAGE_TAG} \
                 ansible_user=${ansible_user} \
                 ansible_password=${ansible_user_pass} \
-                pg_admin_email=${pgadmin_user} \
-                pg_admin_password=${pgadmin_pass} \
-                odoo_user=${pgsql_user} \
-                odoo_password=${pgsql_pass} \
+                
                 postgres_hostname=${POSTGRES_HOSTNAME} \
 "')
             }
@@ -89,16 +113,6 @@ pipeline {
     stage ('Test full deployment') {
         steps {
             sh '''
-                echo IMAGE_NAME=$IMAGE_NAME;
-                echo IMAGE_TAG=$IMAGE_TAG;
-                echo ODOO_URL=$ODOO_URL;
-                echo POSTGRES_HOSTNAME=$POSTGRES_HOSTNAME;
-                echo PGADMIN_URL=$PGADMIN_URL;
-                echo CONTAINER_NAME=$CONTAINER_NAME;
-                echo USER_NAME=$USER_NAME;
-                echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
-		echo PGADMIN_HOSTNAME=$PGADMIN_HOSTNAME;
-
                 curl -LI http://${PGADMIN_HOSTNAME}:80 | grep "200";
                 curl -L http://${PGADMIN_HOSTNAME}:80 | grep "IC GROUP";
 

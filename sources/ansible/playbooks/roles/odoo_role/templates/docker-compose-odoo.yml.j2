@@ -2,8 +2,8 @@ version: '3.3'
 services:
     {{ postgres_service_name }}:
         environment:
-            - POSTGRES_USER={{ odoo_user }}
-            - POSTGRES_PASSWORD={{ odoo_password }}
+            - POSTGRES_USER={{ postgres_user }}
+            - POSTGRES_PASSWORD={{ postgres_password }}
             - POSTGRES_DB=postgres
         networks:
             - {{ odoo_network }}
@@ -12,12 +12,12 @@ services:
         container_name: {{ postgres_container_name }}
         image: 'postgres:10'
         ports:
-            - '5432:5432'
+            - '{{ postgres_port }}:5432'
     {{ odoo_service_name }}:
         depends_on:
             - postgres
         ports:
-            - '80:8069'
+            - '{{ odoo_port }}:8069'
         container_name: {{ odoo_container_name }}
         networks:
             - {{ odoo_network }}
@@ -26,9 +26,10 @@ services:
             - '{{ odoo_addons_folder }}:/mnt/extra-addons'
             - '{{ odoo_web_data_volume }}:/var/lib/odoo'
         environment:
-            - USER={{ odoo_user }}
-            - PASSWORD={{ odoo_password }}
-            - HOST=postgres
+            - USER={{ postgres_user }}
+            - PASSWORD={{ postgres_password }}
+            - HOST={{ postgres_service_name }}
+            - PORT={{ postgres_port }}
         image: odoo:13.0
 volumes:
     {{ odoo_web_data_volume }}:
