@@ -20,6 +20,7 @@ pipeline {
 
   agent any
 
+/*
   stages {
     stage ('Build docker image') {
         steps{
@@ -50,7 +51,6 @@ pipeline {
         }
     }
 
-/*
     stage ('Login and push docker image') {
         environment {
             DOCKERHUB_PASSWORD  = credentials('dockerhub')
