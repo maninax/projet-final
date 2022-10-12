@@ -7,6 +7,7 @@ pipeline {
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2 | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
+    PATH = "/usr/local/bin:${env.PATH}"
   }
 
   agent any
