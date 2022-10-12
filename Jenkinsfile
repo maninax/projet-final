@@ -7,7 +7,6 @@ pipeline {
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2 | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
-    PATH = "/usr/local/bin:${env.PATH}"
   }
 
   agent any
@@ -67,8 +66,8 @@ pipeline {
                 usernamePassword(credentialsId: 'pgsql_credentials', usernameVariable: 'pgsql_user', passwordVariable: 'pgsql_pass'),
                 // string(credentialsId: 'ansible_sudo_pass', variable: 'ansible_sudo_pass')
             ]){
-            sh "echo ---------------- ; ansible-playbook || true ; echo $PATH ; ls /usr/local/bin ; echo -------------------"
-            ansiblePlaybook ( // TODO: put the correct infos there
+            sh "echo ---------------- ; ansible-playbook || true ; echo $PATH ; ls /usr/bin ; echo -------------------"
+            ansiblePlaybook (
                 disableHostKeyChecking: true,
                 installation: 'ansible',
                 inventory: 'sources/ansible/hosts.yml',
