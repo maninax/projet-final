@@ -7,8 +7,10 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
 apt update && \
 apt full-upgrade && \
-apt install -y docker-ce docker-ce-cli containerd.io docker-compose python3-pip openjdk-8-jdk openssh-server && \
+apt install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-compose python3-pip openjdk-11-jdk-headless openssh-server git sshpass && \
 apt autoremove -y && \
+apt purge -y && \
+apt autopurge -y && \
 pip install docker && \
 pip install ansible && \
 update-alternatives --install /usr/bin/python python /usr/bin/python3 100 && \
