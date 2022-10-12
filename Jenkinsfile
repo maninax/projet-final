@@ -11,8 +11,8 @@ pipeline {
     WORKER3_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
 
     IC_WEBAPP_PORT = "80"
-    PGADMIN_PORT = """${sh(returnStdout: true, script: 'echo PGADMIN_URL | grep -Po '//.+?:.+/?' | grep -Po '(?<=:)(\\d+)' || echo "80"')}"""
-    ODOO_PORT = """${sh(returnStdout: true, script: 'echo ODOO_URL | grep -Po '//.+?:.+/?' | grep -Po '(?<=:)(\\d+)' || echo "80"')}"""
+    PGADMIN_PORT = """${sh(returnStdout: true, script: 'echo PGADMIN_URL | grep -Po "//.+?:.+/?" | grep -Po "(?<=:)(\\d+)" || echo "80"')}"""
+    ODOO_PORT = """${sh(returnStdout: true, script: 'echo ODOO_URL | grep -Po "//.+?:.+/?" | grep -Po "(?<=:)(\\d+)" || echo "80"')}"""
     POSTGRES_PORT = "5432"
 
     ODOO_DATABASE_VOLUME = "" // #TODO: find a good path for the Odoo DB
