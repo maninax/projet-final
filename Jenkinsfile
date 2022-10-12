@@ -5,7 +5,7 @@ pipeline {
     ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d: -f2- | xargs')}"
     POSTGRES_HOSTNAME = """${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
     PGADMIN_HOSTNAME = """${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | perl -pe "s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\\d+)?(/.*$)?~\\1~"')}"""
-    PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2- | xargs')}"
+    PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d: -f2- | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
   }
@@ -97,6 +97,7 @@ pipeline {
                 echo CONTAINER_NAME=$CONTAINER_NAME;
                 echo USER_NAME=$USER_NAME;
                 echo ANSIBLE_CONFIG=$ANSIBLE_CONFIG;
+		echo PGADMIN_URL=$PGADMIN_URL;
 
                 # Test for ic-webapp
                 # Showcase website runs on the same server as the pgadmin 
