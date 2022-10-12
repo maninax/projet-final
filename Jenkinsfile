@@ -105,8 +105,8 @@ pipeline {
     stage ('Test full deployment') {
         steps {
             sh '''
-                curl -LI http://${PGADMIN_HOSTNAME}:80 | grep "200";
-                curl -L http://${PGADMIN_HOSTNAME}:80 | grep "IC GROUP";
+                curl -LI http://${WORKER2_HOSTNAME}:80 | grep "200";
+                curl -L http://${WORKER2_HOSTNAME}:80 | grep "IC GROUP";
 
                 curl -LI ${ODOO_URL} | grep "200";
                 curl -L ${ODOO_URL} | grep "Odoo";
