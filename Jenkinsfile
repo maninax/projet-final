@@ -75,15 +75,14 @@ pipeline {
                 inventory: 'sources/ansible/hosts.yml',
                 playbook: 'sources/ansible/play.yml', // A playbook to play all playbooks, and in the darkness bind them
                 extras: '--extra-vars "NETWORK_NAME=network \
-                        IMAGE_TAG=${IMAGE_TAG} \
-                        ansible_user=${ansible_user} \
-                        ansible_password=${ansible_user_pass} \
-                        //ansible_sudo_pass=${ansible_sudo_pass} \
-                        pg_admin_email=${pgadmin_user} \
-                        pg_admin_password=${pgadmin_pass} \
-                        odoo_user=${pgsql_user} \
-                        odoo_password=${pgsql_pass} \
-                        postgres_hostname=${POSTGRES_HOSTNAME} \
+IMAGE_TAG=${IMAGE_TAG} \
+ansible_user=${ansible_user} \
+ansible_password=${ansible_user_pass} \
+pg_admin_email=${pgadmin_user} \
+pg_admin_password=${pgadmin_pass} \
+odoo_user=${pgsql_user} \
+odoo_password=${pgsql_pass} \
+postgres_hostname=${POSTGRES_HOSTNAME} \
                         "')
             }
         }
