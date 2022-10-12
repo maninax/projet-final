@@ -3,6 +3,7 @@ pipeline {
     IMAGE_NAME = "ic-webapp"
     IMAGE_TAG = "${sh(returnStdout: true, script: 'grep version releases.txt | cut -d\\: -f2 | xargs')}"
     ODOO_URL = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | cut -d\\: -f2 | xargs')}"
+    POSTGRES_HOSTNAME = "${sh(returnStdout: true, script: 'grep ODOO_URL releases.txt | perl -pe \'s~ODOO_URL: ?https?://([A-Za-z0-9.]+)(:\d+)?(/.*$)?~\\1~\'')}"
     PGADMIN_URL = "${sh(returnStdout: true, script: 'grep PGADMIN_URL releases.txt | cut -d\\: -f2 | xargs')}"
     CONTAINER_NAME = "ic-webapp"
     USER_NAME = "maninax"
@@ -78,14 +79,15 @@ pipeline {
                         //ansible_sudo_pass=${ansible_sudo_pass} \
                         pg_admin_email=${pgadmin_user} \
                         pg_admin_password=${pgadmin_pass} \
-                        pg_admin_config_host
                         odoo_user=${pgsql_user} \
-                        odoo_password=${pgsql_pass}"')
+                        odoo_password=${pgsql_pass} \
+                        postgres_hostname=${POSTGRES_HOSTNAME}
+                        "')
             }
         }
     }
 
-    stage ('Test full deployment') { // Définir des variables pour les IP des machines Odoo et pgadmin
+    stage ('Test full deployment') {
         steps {
             sh '''
                 sleep 10;

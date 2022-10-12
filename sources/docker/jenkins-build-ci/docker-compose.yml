@@ -1,0 +1,10 @@
+version: '2'
+services:
+  jenkins:
+    image: jenkins-build-ci
+    restart: always
+    ports:
+      - '23456:22'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
