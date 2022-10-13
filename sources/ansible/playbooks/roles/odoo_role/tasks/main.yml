@@ -6,7 +6,7 @@
     mode: 0655
 
 - name: "Deploy using docker-compose-odoo.yml"
-  command: "docker compose -f /home/{{ ansible_user }}/docker-compose-odoo.yml up -d && sleep 8"
+  command: "docker compose -f /home/{{ ansible_user }}/docker-compose-odoo.yml up -d"
 
 - name: "Preconfigure Odoo"
-  command: "curl http://localhost:{{ odoo_port }}/web/database/create --data 'name={{ odoo_database }}&login={{ odoo_username }}&password={{ odoo_password }}&lang=en_US&country_code=fr&phone=&master_pwd=&demo=0' --compressed"
+  command: "while ! curl http://localhost:{{ odoo_port }}/web/database/create --data 'name={{ odoo_database }}&login={{ odoo_username }}&password={{ odoo_password }}&lang=en_US&country_code=fr&phone=&master_pwd=&demo=0' --compressed ; do sleep 2 ; done"
