@@ -6,7 +6,7 @@
         "Host": "{{ postgres_hostname }}", 
         "Port": {{ postgres_port }},
         "MaintenanceDB": "postgres", 
-        "Username": "{{ pg_admin_init_config_username }}",
+        "Username": "{{ postgres_user }}",
         "SSLMode": "prefer"
       }
     }
