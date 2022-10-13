@@ -107,6 +107,7 @@ pipeline {
 	agent { label 'jenkins-build-ci' }
         steps {
             sh '''
+		sleep 10;
                 curl -LI http://${WORKER2_HOSTNAME}:80 | grep "200";
                 curl -L http://${WORKER2_HOSTNAME}:80 | grep "IC GROUP";
 

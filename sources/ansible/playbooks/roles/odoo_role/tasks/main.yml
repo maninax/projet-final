@@ -10,4 +10,4 @@
 
 - name: "Preconfigure Odoo"
   command: "curl http://localhost:{{ odoo_port }}/web/database/create --data 'master_pwd={{ postgres_password }}&name={{ odoo_database }}&login={{ odoo_username }}&password={{ odoo_password }}&demo=1' --compressed"
-  no_log: True
+    #no_log: True
