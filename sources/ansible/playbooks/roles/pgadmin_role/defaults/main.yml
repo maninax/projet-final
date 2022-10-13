@@ -10,8 +10,8 @@ pgadmin_service_name: pgadmin
 pgadmin_container_name: pgadmin
 
 pgadmin_port: 80
-pg_admin_init_config_name: Odoo pgAdmin Server
-pg_admin_init_config_group: Odoo
+pg_admin_init_config_name: odoo
+pg_admin_init_config_group: odoo
 pg_admin_init_config_username: odoo
 postgres_hostname: postgres
 postgres_port: 5432
