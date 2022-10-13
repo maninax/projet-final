@@ -9,7 +9,7 @@
   command: "docker compose -f /home/{{ ansible_user }}/docker-compose-odoo.yml up -d"
 
 - name: "Preconfigure Odoo"
-  command: "curl http://localhost:{{ odoo_port }}/web/database/create --data 'name={{ odoo_database }}&login={{ odoo_username }}&password={{ odoo_password }}&lang=en_US&country_code=fr&phone=&master_pwd=&demo=0' --compressed"
+  command: "curl http://localhost:{{ odoo_port }}/web/database/create --data 'name=postgres&login={{ odoo_username }}&password={{ odoo_password }}&lang=en_US&master_pwd=&phone=&demo=0&country_code=fr' --compressed"
   register: curl
   until: "curl is not failed"
   retries: 10
